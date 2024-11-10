@@ -1,18 +1,18 @@
 class BookList extends HTMLElement {
-    constructor() {
+    constructor() { 
         super();
-        this.page = 1;
+        this.page = 1; // Track the current page and the filtered list of books
         this.matches = books;
         this.attachShadow({ mode: 'open' });
         this.render();
     }
 
-    connectedCallback() {
+    connectedCallback() { // Called when the component is added to the DOM. It initializes the theme and sets up event listeners.
         this.applyTheme();
         this.addEventListeners();
     }
 
-    render() {
+    render() {// Sets up the main HTML structure, placing components (genre-options, author-options, and the book previews) in the layout.
         this.shadowRoot.innerHTML = `
             <style>
                 .wrapper{
@@ -192,7 +192,7 @@ class BookList extends HTMLElement {
         this.setButtonState();
     }
 
-    renderBookPreviews() {
+    renderBookPreviews() { // Creates BookPreview components dynamically for each book and appends them to the [data-list-items] container. This allows book previews to be generated independently and displayed in a modular way.
         const container = this.shadowRoot.querySelector('[data-list-items]');
         container.innerHTML = ''; // Clear current previews
         const fragment = document.createDocumentFragment();
@@ -207,20 +207,22 @@ class BookList extends HTMLElement {
         container.appendChild(fragment);
     }
 
-    setButtonState() {
-        const button = this.shadowRoot.querySelector('[data-list-button]');
-        const remaining = this.matches.length - BOOKS_PER_PAGE * this.page;
-        button.textContent = `Show more (${remaining > 0 ? remaining : 0})`;
-        button.disabled = remaining <= 0;
+    setButtonState() { //Updates the state and text of the "Show more" button, calculating the remaining books based on the current page.
+        const remaining = this.matches.length - BOOKS_PER_PAGE;
+        document.querySelector('[data-list-button]').innerHTML = `
+            <span>Show more</span>
+            <span class="list__remaining"> (${remaining > 0 ? remaining : 0})</span>
+        `;
+        document.querySelector('[data-list-button]').disabled = remaining <= 0;
     }
 
-    applyTheme() {
+    applyTheme() { //Checks the user's preferred color scheme and applies it to the document.
         const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
         document.documentElement.style.setProperty('--color-dark', theme === 'night' ? '255, 255, 255' : '10, 10, 20');
         document.documentElement.style.setProperty('--color-light', theme === 'night' ? '10, 10, 20' : '255, 255, 255');
     }
 
-    addEventListeners() {
+    addEventListeners() { //Sets up the event listener for the "Show more" button, linking it to loadMoreBooks() to incrementally load more books as requested.
         this.shadowRoot.querySelector('[data-list-button]').addEventListener('click', () => this.loadMoreBooks());
     }
 

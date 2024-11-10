@@ -5,19 +5,17 @@ class AuthorOptions extends HTMLElement {
         this.render();
     }
 
-    render() {
-        const fragment = document.createDocumentFragment();
-        const defaultOption = this.createOption('any', 'All Authors');
-        fragment.appendChild(defaultOption);
-        Object.entries(authors).forEach(([id, name]) => {
-            fragment.appendChild(this.createOption(id, name));
-        });
-
-        this.shadowRoot.innerHTML = `<select data-search-authors></select>`;
-        this.shadowRoot.querySelector('select').appendChild(fragment);
+    render() { //Similar to GenreOptions, render() builds the authors dropdown by iterating over the authors data. It includes a default "All Authors" option and then iterates over the author data.
+        const authorsHtml = document.createDocumentFragment();
+        const firstAuthorElement = this.createOptionElement('any', 'All Authors');
+        authorsHtml.appendChild(firstAuthorElement);
+        for (const [id, name] of Object.entries(authors)) {
+            authorsHtml.appendChild(this.createOptionElement(id, name));
+        }
+        document.querySelector('[data-search-authors]').appendChild(authorsHtml);
     }
 
-    createOption(value, text) {
+    createOption(value, text) { //A helper function for generating <option> elements.
         const option = document.createElement('option');
         option.value = value;
         option.innerText = text;

@@ -1,18 +1,14 @@
 class BookPreview extends HTMLElement {
-    static get observedAttributes() {
-        return ['data-id', 'data-image', 'data-title', 'data-author'];
-    }
-
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
     }
 
-    attributeChangedCallback() {
+    attributeChangedCallback() { //Calls render() whenever observed attributes are updated, allowing the component to display updated book data.
         this.render();
     }
 
-    render() {
+    render() { //Constructs the HTML for a book preview, pulling data from attributes like data-id, data-image, data-title, and data-author.
         const id = this.getAttribute('data-id');
         const image = this.getAttribute('data-image');
         const title = this.getAttribute('data-title');

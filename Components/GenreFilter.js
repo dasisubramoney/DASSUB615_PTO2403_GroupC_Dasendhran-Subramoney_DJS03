@@ -5,22 +5,20 @@ class GenreOptions extends HTMLElement {
         this.render();
     }
 
-    render() {
-        const fragment = document.createDocumentFragment();
-        const defaultOption = this.createOption('any', 'All Genres');
-        fragment.appendChild(defaultOption);
-        Object.entries(genres).forEach(([id, name]) => {
-            fragment.appendChild(this.createOption(id, name));
-        });
-
-        this.shadowRoot.innerHTML = `<select data-search-genres></select>`;
-        this.shadowRoot.querySelector('select').appendChild(fragment);
+    render() { //Creates the genre options dropdown dynamically using data from genres. It adds an "All Genres" option by default and then iterates over each genre in the genres object.
+        const genreHtml = document.createDocumentFragment();
+        const firstGenreElement = this.createOptionElement('any', 'All Genres');
+        genreHtml.appendChild(firstGenreElement);
+        for (const [id, name] of Object.entries(genres)) {
+            genreHtml.appendChild(this.createOptionElement(id, name));
+        }
+        document.querySelector('[data-search-genres]').appendChild(genreHtml);
     }
 
-    createOption(value, text) {
+    createOption(id, name) { //This helper function generates individual <option> elements with id and display name.
         const option = document.createElement('option');
-        option.value = value;
-        option.innerText = text;
+        option.id = id;
+        option.innerText = name;
         return option;
     }
 }

@@ -5,7 +5,7 @@ class ThemeSettings extends HTMLElement {
         this.render();
     }
 
-    render() {
+    render() { //Creates a dropdown for theme selection with "Day" and "Night" options.
         this.shadowRoot.innerHTML = `
             <label>Theme:
                 <select data-settings-theme>
@@ -15,13 +15,13 @@ class ThemeSettings extends HTMLElement {
             </label>
         `;
 
-        this.shadowRoot.querySelector('select').addEventListener('change', (e) => {
-            const theme = e.target.value;
+        this.shadowRoot.querySelector('select').addEventListener('change', (event) => { //Adds an event listener to detect changes in the dropdown, triggering updateTheme() when a user changes the theme.
+            const theme = event.target.value;
             this.updateTheme(theme);
         });
     }
 
-    updateTheme(theme) {
+    updateTheme(theme) { //Updates CSS custom properties to switch between light and dark themes dynamically.
         const dark = theme === 'night' ? '255, 255, 255' : '10, 10, 20';
         const light = theme === 'night' ? '10, 10, 20' : '255, 255, 255';
         document.documentElement.style.setProperty('--color-dark', dark);
